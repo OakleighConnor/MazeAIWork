@@ -7,19 +7,20 @@ using UnityEngine.EventSystems;
 
 namespace Player
 {
-    public class MoveState : State
+    public class RunState : State
     {
 
         // constructor
-        public MoveState(PlayerScript player, StateMachine sm) : base(player, sm)
+        public RunState(PlayerScript player, StateMachine sm) : base(player, sm)
         {
         }
 
         public override void Enter()
         {
             base.Enter();
-            player.speed = 3.5f;
-            player.groundDrag = 3f;
+            player.speed = 15f;
+            player.groundDrag = 1.5f;
+            Debug.Log("Running");
         }
 
         public override void Exit()
@@ -35,19 +36,17 @@ namespace Player
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            player.CheckForIdle();
-            player.CheckForRun();
+            player.CheckForMovement();
         }
 
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+            Vector3 moveDirection = player.orientation.forward * player.yInput + player.orientation.right * player.xInput;
+            player.rb.AddForce(moveDirection.normalized * player.speed * 100f * Time.deltaTime, ForceMode.Force);
 
             player.ApplyMovement();
 
-            Vector3 moveDirection = player.orientation.forward * player.yInput + player.orientation.right * player.xInput;
-            player.rb.AddForce(moveDirection.normalized * player.speed * 100f * Time.deltaTime, ForceMode.Force);
         }
     }
 }
-

@@ -1,8 +1,10 @@
+using Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Unity.IO.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
@@ -15,10 +17,13 @@ namespace Enemy
         public Animator anim;
         public NavMeshAgent nav;
 
+        public float speed;
+
         public Transform[] points;
         public int desPoint;
 
         // variables holding the different states
+        public AiSensor sensor;
         public WalkState walkState;
         public AttackState attackState;
         public StateMachine sm;
@@ -36,6 +41,8 @@ namespace Enemy
             sm = gameObject.AddComponent<StateMachine>();
             anim = GetComponent<Animator>();
             nav = GetComponent<NavMeshAgent>();
+
+            sensor = GetComponent<AiSensor>();
 
             // add new states here
             walkState = new WalkState(this, sm);
@@ -67,20 +74,29 @@ namespace Enemy
 
         public void CheckForPlayer()
         {
-            //TODO: Raycast to check for player
-            if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, config.player))
+            if(sensor.Objects.Count > 0)
             {
-                Debug.Log("Player Spotted");
                 sm.ChangeState(attackState);
+                return;
             }
         }
-
         public void CheckForIdle()
         {
             if (!nav.pathPending && nav.remainingDistance < 0.5f)
             {
                 sm.ChangeState(walkState);
                 return;
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.tag == "Player")
+            {
+                PlayerScript player = other.GetComponentInParent<PlayerScript>();
+                player.alive = false;
+                player.sm.ChangeState(player.idleState);
+                Debug.Log("Kill");
             }
         }
     }

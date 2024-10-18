@@ -17,8 +17,10 @@ namespace Enemy
 
         public override void Enter()
         {
-            enemy.anim.Play("Male_Sword_Walk", 0, 0);
             base.Enter();
+            enemy.anim.Play("Male_Sword_Walk", 0, 0);
+            enemy.nav.speed = 3.5f;
+            enemy.aggressive = false;
         }
 
         public override void Exit()

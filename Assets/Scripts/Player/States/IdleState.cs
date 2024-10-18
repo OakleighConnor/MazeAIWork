@@ -33,7 +33,11 @@ namespace Player
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-            player.CheckForMovement();
+            if (player.alive)
+            {
+                player.CheckForMovement();
+                player.CheckForRun();
+            }
         }
 
         public override void PhysicsUpdate()

@@ -8,7 +8,7 @@ public class MoveCam : MonoBehaviour
     public Transform camPos;
     public Transform orientation;
 
-    float sens = 1500f;
+    public float sens;
     float xRotation;
     float yRotation;
     float sensX;
@@ -17,6 +17,9 @@ public class MoveCam : MonoBehaviour
     {
         sensX = sens; 
         sensY = sens;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     // Update is called once per frame
     void Update()

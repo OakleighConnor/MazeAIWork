@@ -17,8 +17,10 @@ namespace Enemy
 
         public override void Enter()
         {
-            chaseTimer = 10;
-            //enemy.anim.Play("Male Sword Sprint", 0, 0);
+            chaseTimer = 5;
+            enemy.nav.speed = 5f;
+            enemy.anim.Play("Male Sprint", 0, 0);
+            enemy.aggressive = true;
             base.Enter();
         }
 
@@ -44,23 +46,13 @@ namespace Enemy
             {
                 chaseTimer -= Time.deltaTime;
             }
+
+            enemy.nav.destination = enemy.playerPos.position;
         }
 
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
-
-            // Move
-
-            if (!enemy.nav.pathPending && enemy.nav.remainingDistance < 0.5f)
-            {
-                if (enemy.points.Length == 0)
-                {
-                    return;
-                }
-                enemy.nav.destination = enemy.points[enemy.desPoint].position;
-                enemy.desPoint = (enemy.desPoint + 1) % enemy.points.Length;
-            }
 
         }
     }
