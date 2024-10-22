@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 namespace Enemy
 {
@@ -97,6 +98,7 @@ namespace Enemy
                 player.alive = false;
                 player.sm.ChangeState(player.idleState);
                 Debug.Log("Kill");
+                SceneManager.LoadScene(0);
             }
         }
     }
